@@ -1,0 +1,63 @@
+html: {
+	font-family: 'helvetica neue';
+	font-size: 10px;
+	text-align: center;
+}
+
+body {
+	background-color: black;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	flex: 1;
+	min-height: 100vh;
+	margin: 0;
+	box-sizing: border-box;
+	color: white;
+}
+
+.clock {
+	height: 30rem;
+	width: 30rem;
+	background-color: rgba(255, 0, 0, 0.7);
+	border-radius: 20rem;
+	align-self: center;
+	position: absolute;
+	margin: auto;
+}
+
+.face {
+	background-color: rgba(0, 255, 0, 0.5);
+	height: 24rem;
+	width: 24rem;
+	border-radius: 20rem;
+	align-self: center;
+	position: relative;
+	top: 10%;
+	margin: auto;
+}
+
+.hand {
+	height: 3px;
+	background-color: blue;
+	width: 15rem;
+	transform-origin: 100%;
+	position: absolute;
+	top: 50%;
+	transform: rotate(90deg);
+	z-index: 5;
+}
+
+.controls {
+	display: block;
+	position: absolute;
+	top: 50px;
+}
+#startStop {
+	display: block;
+}
+
+#breakBtn {
+	display: block;
+	visibility: hidden;
+}
