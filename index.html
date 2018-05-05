@@ -6,24 +6,44 @@
     <link rel="stylesheet" href="style.css"/>
   </head>
   <body>
-
+    <div class="showTime">
+      <div id = 'increase'>&#9650;</div>
       <div id='countdown'></div>
-      <!-- <div id='started'>0.00</div> -->
-      <div id='remaining'></div>
-      <div id='message'>
+      <div id = 'decrease'>&#9660;</div>
+    </div>
 
+    <div id='message'></div>
+
+    <div class='square'>
+      <div class="outer">
+        <div class="inner"></div>
+        <div id = 'needle' class="needle"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+
+      <button id = 'breakBtn' class='off'>brakes</button>
+
+      <button class = 'green' id='startStop'>start</button>
+
+      <div class="battery">
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
       </div>
 
+      <button class='off' id='reset' title= 'reset all'>reverse</button>
 
-      <div class="clock">
-	      <div class="face"></div>
-	      <div class="hand"></div>
+      <button class='off' onclick ="alert('Ejector Seat and Smoke Screen are not included in the standard model. Please see your developer for details.')">eject</button>
 
-      </div>
-      <div class="controls">
-        <button id='startStop'>start</button>
-        <button id = 'breakBtn'>break</button>
-      </div>
+    </div> <!-- end 'CONTROLS' -->
+
+
+    <audio id = 'beep' src="car-beep.wav"></audio>
 
     <script type="text/javascript" src="script.js"></script>
   </body>

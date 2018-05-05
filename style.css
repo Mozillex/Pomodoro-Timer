@@ -1,63 +1,141 @@
-html: {
+html {
 	font-family: 'helvetica neue';
-	font-size: 10px;
+	font-size: 15px;
 	text-align: center;
 }
 
 body {
+	box-sizing: border-box;
 	background-color: black;
 	align-items: center;
 	justify-content: center;
 	display: flex;
-	flex: 1;
 	min-height: 100vh;
 	margin: 0;
 	box-sizing: border-box;
 	color: white;
 }
 
-.clock {
+.square {
+	position: absolute;
+	margin: auto;
+	text-align: center;
+	height: 15rem;
+	overflow: hidden;
+}
+
+.outer {
 	height: 30rem;
 	width: 30rem;
 	background-color: rgba(255, 0, 0, 0.7);
 	border-radius: 20rem;
+	box-shadow: inset -1px 2px 20px 2px #00000052;
 	align-self: center;
-	position: absolute;
+	justify-content: center;
+	/* position: absolute; */
 	margin: auto;
 }
 
-.face {
-	background-color: rgba(0, 255, 0, 0.5);
-	height: 24rem;
-	width: 24rem;
+.inner {
+	background-color: rgba(0, 0, 0, 1);
+	height: 20rem;
+	width: 20rem;
 	border-radius: 20rem;
+	box-shadow: -1px 0px 18px 3px #572121c7;
+
 	align-self: center;
 	position: relative;
-	top: 10%;
+	top: 17%;
 	margin: auto;
 }
 
-.hand {
+.needle {
 	height: 3px;
 	background-color: blue;
+	box-shadow: 7px -2px 9px 2px hsla(249, 100%, 50%, 0.67);
 	width: 15rem;
 	transform-origin: 100%;
-	position: absolute;
-	top: 50%;
-	transform: rotate(90deg);
-	z-index: 5;
+	position: relative;
+	top: -5.1rem;
+	/* transform: rotate(0deg); */
+	z-index: 15;
+	transition: all 0.8s;
+	transition-timing-function: ease-in-out;
 }
 
 .controls {
 	display: block;
-	position: absolute;
-	top: 50px;
+	position: relative;
+	width: 100%;
+	text-align: center;
+	top: 150px;
+	z-index: 10;
 }
-#startStop {
-	display: block;
+button {
+	background-color: transparent;
+	border-radius: 4px;
+	color: white;
+	font-size: 1.1rem;
+	text-align: center;
+	width: 5rem;
+	border: none;
+	margin: 0.5rem;
 }
 
-#breakBtn {
-	display: block;
+button.alert {
+	background-color: red;
+	visibility: visible;
+	color: #f3afaf;
+	box-shadow: 0 0 20px 15px #9f2312c9, 0 0 10px 7px #cddc393d;
+}
+
+button.green {
+	background-color: green;
+	box-shadow: 0 0 20px 5px #008000ab;
+	visibility: visible;
+}
+
+button.off {
+	background-color: #670000;
+	color: black;
+	visibility: visible;
+}
+
+button.hidden {
 	visibility: hidden;
+}
+
+.battery {
+	display: inline-block;
+	padding: none;
+	margin: auto 2rem;
+}
+
+.cell {
+	display: inline-block;
+	border: 1px solid blue;
+	padding: none;
+	margin: 0;
+	height: 1rem;
+	width: 0.2rem;
+}
+
+.showTime {
+	position: absolute;
+	top: 50%;
+	text-align: center;
+
+	z-index: 6;
+}
+
+#countdown {
+	display: inline-block;
+	font-size: 2rem;
+}
+
+#message {
+	position: absolute;
+	top: 42%;
+	z-index: 15;
+	font-weight: bold;
 }
