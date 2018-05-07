@@ -57,7 +57,6 @@ body {
 	transform-origin: 100%;
 	position: relative;
 	top: -5.1rem;
-	/* transform: rotate(0deg); */
 	z-index: 15;
 	transition: all 0.8s;
 	transition-timing-function: ease-in-out;
@@ -87,6 +86,7 @@ button.alert {
 	visibility: visible;
 	color: #f3afaf;
 	box-shadow: 0 0 20px 15px #9f2312c9, 0 0 10px 7px #cddc393d;
+	
 }
 
 button.green {
@@ -103,6 +103,19 @@ button.off {
 
 button.hidden {
 	visibility: hidden;
+}
+
+button#reset:hover {
+	background-color: green;
+	box-shadow: 0 0 20px 5px #008000ab;
+	font-weight: bold;
+	color: white;
+}
+
+button.green:hover {
+	font-weight: bold;
+	text-transform: uppercase;
+
 }
 
 .battery {

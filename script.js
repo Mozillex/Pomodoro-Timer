@@ -12,72 +12,86 @@ const beep = document.getElementById('beep');
 
 let beginTime;
 let endTime;
-let timeRemaining = 25;
 
-let workMins = 25;
+let countMins = 25;
+let timeRemaining = countMins * 60000;
 
-let breakMins = 5;
-let takeBreak;
+
+let onBreak = false;
 
 let started = false;
-let countingDown;
 let paused = false;
+
+let timerInterval;
+let flasherInterval;
+let delay = 0;
+let loop = 0;
 
 increase.onclick = () => {
 	if (!started) {
-		workMins += 1;
-		timeRemaining += 1;
-		countdown.textContent = workMins + ':00';
+		countMins ++;
+		timeRemaining +=60000;
+		countdown.textContent = countMins + ':00';
 		return;
 	}
-	timeRemaining += 1;
-	workMins += 1;
-	endTime += 60000;
-	updateTimer();
+		countMins ++;
+		timeRemaining +=60000;
+		endTime += 60000;
+		updateTimer();
 };
 
 decrease.onclick = () => {
-	if (timeRemaining <= 1) return;
+	if (timeRemaining <= 60000) return;
 	if (!started) {
-		workMins -= 1;
-		timeRemaining -= 1;
-		countdown.textContent = workMins + ':00';
+		countMins --;
+		timeRemaining -= 60000;
+		countdown.textContent = countMins + ':00';
 		return;
 	}
-	timeRemaining -= 1;
-	workMins -= 1;
-	endTime -= 60000;
-	updateTimer();
+		countMins --;
+		timeRemaining -= 60000;
+		endTime -= 60000;
+		updateTimer();
 };
 
-countdown.textContent = workMins + ':' + '00';
+countdown.textContent = countMins + ':' + '00';
 startStop.onclick = startTimer;
 
 function startTimer() {
 	started = true;
 	startStop.textContent = 'pause';
 	beginTime = Date.now();
-	endTime = beginTime + workMins * 60000;
+	endTime = beginTime + countMins * 60000;
 	timeRemaining = endTime - Date.now();
-	countingDown = setInterval(updateTimer, 1000);
+	timerInterval = setInterval(updateTimer, 1000);
 	startStop.onclick = togglePause;
+	// reset.onclick = ()=>{
+	// 	paused = false;
+	// 	onBreak = false;
+	// 	started = false;
+	// 	clearInterval(flasherInterval);
+	// 	setupCounter();
+	// }
+	message.textContent = '';
 }
 
 function togglePause() {
-	let pausedLength;
+	let pausedFor;
 
 	if (paused) {
+		message.textContent =  '';
 		// then unpause and start updating the timer
-		countingDown = setInterval(updateTimer, 1000);
-		pausedLength = Date.now() - pausedAt;
-		endTime += pausedLength;
+		timerInterval = setInterval(updateTimer, 1000);
+		pausedFor = Date.now() - pausedAt;
+		endTime += pausedFor;
 		pausedAt = undefined;
 		startStop.textContent = 'pause';
 		paused = false;
 		return;
 	}
-	// if NOT paused, then
-	clearInterval(countingDown); //stop updating the timer
+	// if NOT paused, then make it paused
+	message.textContent = '• PAUSED •';
+	clearInterval(timerInterval); //stop updating the timer
 	startStop.textContent = 'cont.';
 	paused = true;
 	pausedAt = Date.now();
@@ -85,45 +99,61 @@ function togglePause() {
 
 function updateTimer() {
 	let now = Date.now();
+	let degrees;
 
-	if (!paused) timeRemaining = (endTime - now) / 1000 / 60;
+	timeRemaining = (paused ? timeRemaining :  endTime - now);
 
-	min = Math.floor(timeRemaining);
-	sec = Math.round((timeRemaining - min) * 60);
+	let t = timeRemaining/60000;
+	min = Math.floor(t);
+	sec = Math.round((t - min) * 60);
+
 	if (sec < 10) sec = '0' + String(sec);
 
-	if (timeRemaining <= 0) {
-		clearInterval(countingDown);
+	if (timeRemaining <= 0) {// * * * * * * *  TIMER ENDED
+
+		started = false;
+		clearInterval(timerInterval);
 		beep.play();
-		takeBreak = true;
-		message.textContent = 'Take a Break!';
-		startStop.textContent = '<--';
 		startStop.className = 'off';
-		countdown.textContent = '0:00';
-		breakBtn.className = 'alert';
-		breakBtn.textContent = 'BREAK';
-		setInterval(flashButton, 1000);
-		resetCounter();
-		breakBtn.focus();
+
+
+		if (!onBreak) {
+			onBreak = true;
+			breakBtn.className = 'alert';
+			breakBtn.textContent = 'BREAK';
+			message.textContent = 'Take a Break!';
+			flasherInterval = setInterval(toggleFlash, 800);
+		}
+
+		else {
+			onBreak = false;
+		}
+
+		setupCounter();
+		startStop.focus();
+		degrees = 0;
 	}
 
-	countdown.textContent = started ?
-	min + ':' + sec :
-	takeBreak ?
-	breakMins + ':00' :
-	workMins + ':' + '00';
+	else {
+		countdown.textContent = min + ':' + sec;
+		degrees = Math.round(timeRemaining/60000 / countMins * 180);
+	}
 
-	let degrees = takeBreak ? 0 : timeRemaining / workMins * 180;
 	needle.style.transform = 'rotate(' + degrees + 'deg)';
+
 }
 
-function flashButton() {
+function toggleFlash() {
+	if(breakBtn.className === 'off' && loop>10) {
+		clearInterval(flasherInterval);
+		return;
+	}
 	breakBtn.className = breakBtn.className === 'alert' ? 'off' : 'alert';
+	loop++
 }
 
 let cells = document.querySelectorAll('.cell');
-let delay = 0;
-let loop = 0;
+
 
 function systemCheck() {
 	delay++;
@@ -132,20 +162,36 @@ function systemCheck() {
 	if (loop === 5) clearInterval(sysTest);
 	loop++;
 }
+
 let sysTest = setInterval(systemCheck, 100);
 
-function resetCounter() {
+function setupCounter() {
+	clearInterval(timerInterval);
+	if (paused) togglePause();
 	beginTime = undefined;
 	endTime = undefined;
-	timeRemaining = undefined;
 
-	started = false;
-	paused = false;
 	pausedAt = undefined;
-	countingDown = undefined;
+	countMins = onBreak ? 5 : 25;
+	timeRemaining = countMins * 60000;
 
-	reset.className = 'green';
-	reset.textContent = 'RESET';
+	delay = 0;
+	loop = 0;
+
 	startStop.textContent = 'start';
-	startStop.className = 'off';
+	countdown.textContent = countMins + ':00';
+	startStop.className = 'green';
+	startStop.onclick = startTimer;
+
+	needle.style.transform = 'rotate(0deg)';
+
 }
+reset.onclick = ()=>{
+	paused = false;
+	onBreak = false;
+	started = false;
+	clearInterval(flasherInterval);
+	setupCounter();
+}
+reset.onmouseover = ()=> reset.innerText = 'RESET';
+reset.onmouseleave = ()=> reset.innerText = 'reverse';
