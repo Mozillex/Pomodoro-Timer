@@ -86,13 +86,14 @@ button.alert {
 	visibility: visible;
 	color: #f3afaf;
 	box-shadow: 0 0 20px 15px #9f2312c9, 0 0 10px 7px #cddc393d;
-	
+
 }
 
 button.green {
 	background-color: green;
 	box-shadow: 0 0 20px 5px #008000ab;
 	visibility: visible;
+	cursor: pointer;
 }
 
 button.off {
@@ -110,6 +111,7 @@ button#reset:hover {
 	box-shadow: 0 0 20px 5px #008000ab;
 	font-weight: bold;
 	color: white;
+	cursor: pointer;
 }
 
 button.green:hover {
@@ -148,7 +150,11 @@ button.green:hover {
 
 #message {
 	position: absolute;
-	top: 42%;
+	top: 30%;
 	z-index: 15;
 	font-weight: bold;
+}
+
+.active {
+	cursor: pointer;
 }
